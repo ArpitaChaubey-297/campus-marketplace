@@ -9,11 +9,12 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.List;
-
+import io.swagger.v3.oas.annotations.Parameter;
 @RestController
 @RequestMapping("/products")
 public class ProductController {
@@ -76,11 +77,14 @@ public class ProductController {
         return new ApiResponse<>("Product deleted", 200, "Success");
     }
 
-    @PostMapping("/{id}/image")
+    @PostMapping(
+            value = "/{id}/image",
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE
+    )
     public String uploadImage(
             @PathVariable Long id,
-            @RequestParam("file")
-            MultipartFile file) throws IOException{
-        return productService.uploadImage(id,file);
+            @RequestParam("file") MultipartFile file) throws IOException {
+
+        return productService.uploadImage(id, file);
     }
 }
